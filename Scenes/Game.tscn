@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://LevelManager.cs" type="Script" id=1]
+[ext_resource path="res://img/istockphoto-1286300531-612x612.jpg" type="Texture" id=2]
+[ext_resource path="res://Scenes/Player.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/Prefabs/SpawnPoint.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 31, 31 )
+
+[sub_resource type="RectangleShape2D" id=2]
+
+[node name="Game" type="Node2D"]
+
+[node name="Player" type="KinematicBody2D" parent="." groups=["player"]]
+script = ExtResource( 3 )
+speed = 200.0
+
+[node name="Sprite" type="Sprite" parent="Player"]
+position = Vector2( -1, 0 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2( -1, 0 )
+shape = SubResource( 1 )
+
+[node name="SpeechBubble" type="Node2D" parent="Player"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player/SpeechBubble"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="Player/SpeechBubble/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Player/SpeechBubble/VBoxContainer/Label"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="LevelManager" type="Node2D" parent="."]
+script = ExtResource( 1 )
+respawnTime = 3.0
+
+[node name="Level" type="Node" parent="."]
+
+[node name="Spawns" type="Node" parent="Level"]
+
+[node name="SpawnPoint" parent="Level/Spawns" instance=ExtResource( 4 )]
+position = Vector2( -376, -156 )
+enabled = true
+
+[node name="SpawnPoint2" parent="Level/Spawns" instance=ExtResource( 4 )]
+position = Vector2( -289, 129 )
+
+[node name="SpawnPoint3" parent="Level/Spawns" instance=ExtResource( 4 )]
+position = Vector2( 279, -181 )
+
+[node name="SpawnPoint4" parent="Level/Spawns" instance=ExtResource( 4 )]
+position = Vector2( 277, 153 )
+
+[node name="SpawnPoint5" parent="Level/Spawns" instance=ExtResource( 4 )]
+position = Vector2( -1, -221 )
+
+[node name="TileMap" type="TileMap" parent="Level"]
+format = 1
+
+[node name="Interractable" type="StaticBody2D" parent="."]
+
+[node name="TriggerArea" type="CollisionShape2D" parent="Interractable"]
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="Interractable"]
