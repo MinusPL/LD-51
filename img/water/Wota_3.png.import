@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bubble.png-661b8783376a7557fa0999cd96d518c4.stex"
+path="res://.import/Wota_3.png-86ce2797f88268b7f47dd1459e35b908.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/bubble.png"
-dest_files=[ "res://.import/bubble.png-661b8783376a7557fa0999cd96d518c4.stex" ]
+source_file="res://img/water/Wota_3.png"
+dest_files=[ "res://.import/Wota_3.png-86ce2797f88268b7f47dd1459e35b908.stex" ]
 
 [params]
 

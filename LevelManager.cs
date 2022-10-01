@@ -33,6 +33,7 @@ public class LevelManager : Node2D
 			if(((SpawnPoint)sp).enabled)
 			{
 				activeSpawnPoint = (SpawnPoint)sp;
+				player.Position = activeSpawnPoint.spawnPosition;
 				break;
 			}
 		}
@@ -44,16 +45,21 @@ public class LevelManager : Node2D
 		respTimer += delta;
 		if (respTimer >= respawnTime)
 		{
-			player.Position = activeSpawnPoint.Position;
+			player.Position = activeSpawnPoint.spawnPosition;
+			player.resetSprint();
 			respTimer = 0f;
 		}
 	}
 
 	public void ChangeActiveSpawnPoint(SpawnPoint point)
 	{
-		GD.Print("ASP: ACTIVATED");
 		activeSpawnPoint.SetEnabled(false);
 		activeSpawnPoint = point;
 		activeSpawnPoint.SetEnabled(true);
 	}
+
+	public void OnNavigationCheck()
+    {
+		GetTree().CallGroup("enemies", "GetPathToTarget");
+    }
 }

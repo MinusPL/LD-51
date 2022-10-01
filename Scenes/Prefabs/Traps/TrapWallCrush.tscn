@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scenes/Prefabs/Traps/TrapWallCrush.cs" type="Script" id=1]
+[ext_resource path="res://img/tmp.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=12]
+resource_local_to_scene = true
+extents = Vector2( 5, 20 )
+
+[sub_resource type="RectangleShape2D" id=10]
+resource_local_to_scene = true
+extents = Vector2( 64, 16 )
+
+[sub_resource type="RectangleShape2D" id=11]
+resource_local_to_scene = true
+extents = Vector2( 64, 16 )
+
+[node name="TrapWallCrush" type="Node2D" groups=["traps"]]
+script = ExtResource( 1 )
+wallsSpeed = 200.0
+
+[node name="Trigger" type="Area2D" parent="."]
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Trigger"]
+shape = SubResource( 12 )
+
+[node name="wall1" type="Node2D" parent="."]
+position = Vector2( 0, -36 )
+
+[node name="visual" type="Sprite" parent="wall1"]
+scale = Vector2( 4, 1 )
+texture = ExtResource( 2 )
+
+[node name="wall_collider" type="Area2D" parent="wall1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall1/wall_collider"]
+shape = SubResource( 10 )
+
+[node name="wall2" type="Node2D" parent="."]
+position = Vector2( 0, 36 )
+
+[node name="visual" type="Sprite" parent="wall2"]
+scale = Vector2( 4, 1 )
+texture = ExtResource( 2 )
+
+[node name="wall_collider" type="Area2D" parent="wall2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall2/wall_collider"]
+shape = SubResource( 11 )
+
+[connection signal="area_entered" from="Trigger" to="." method="_on_Trigger_area_entered"]
+[connection signal="body_entered" from="wall1/wall_collider" to="." method="OnWallAreaBodyEntered"]
+[connection signal="body_entered" from="wall2/wall_collider" to="." method="OnWallAreaBodyEntered"]

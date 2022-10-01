@@ -22,7 +22,7 @@ public class SpawnPoint : Node2D
     public override void _Ready()
     {
         Modulate = enabled ? enabledColor : disabledColor;
-        spawnPosition = ((Node2D)GetNode("SpawnPosition")).Position;
+        spawnPosition = ((Node2D)GetNode("SpawnPosition")).GlobalPosition;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,6 +40,7 @@ public class SpawnPoint : Node2D
         if(other.IsInGroup("player"))
         {
             inRange = true;
+            GetTree().CallGroup("player", "ShowInterractionBubble", true);
         }
     }
 
@@ -48,6 +49,7 @@ public class SpawnPoint : Node2D
         if (other.IsInGroup("player"))
         {
             inRange = false;
+            GetTree().CallGroup("player", "ShowInterractionBubble", false);
         }
     }
 
