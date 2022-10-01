@@ -4,11 +4,10 @@
 [ext_resource path="res://img/istockphoto-1286300531-612x612.jpg" type="Texture" id=2]
 [ext_resource path="res://Scenes/Player.cs" type="Script" id=3]
 [ext_resource path="res://Scenes/Prefabs/SpawnPoint.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Prefabs/Interractable.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 31, 31 )
-
-[sub_resource type="RectangleShape2D" id=2]
 
 [node name="Game" type="Node2D"]
 
@@ -69,9 +68,4 @@ position = Vector2( -1, -221 )
 [node name="TileMap" type="TileMap" parent="Level"]
 format = 1
 
-[node name="Interractable" type="StaticBody2D" parent="."]
-
-[node name="TriggerArea" type="CollisionShape2D" parent="Interractable"]
-shape = SubResource( 2 )
-
-[node name="Sprite" type="Sprite" parent="Interractable"]
+[node name="Interractable" parent="." instance=ExtResource( 5 )]
