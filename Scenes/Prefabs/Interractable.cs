@@ -37,15 +37,19 @@ public class Interractable : Node2D
 
 
     Node2D head;
+    Sprite baseSprite;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        head = (Node2D)GetNode("Head");
+        baseSprite = (Sprite)GetNode("Base");
         EmitSignal("Activated", activated);
         if (type == InterractableType.ITYPE_TIMED)
+        {
+            head = (Node2D)GetNode("Head");
             state = activated ? 2 : 0;
+        }
         originalActivationState = activated;
     }
 
@@ -59,6 +63,7 @@ public class Interractable : Node2D
                     if (Input.IsActionJustPressed("action") && inRange)
                     {
                         activated = !activated;
+                        baseSprite.FlipH = activated;
                         EmitSignal("Activated", activated);
                     }
                     break;
@@ -92,17 +97,17 @@ public class Interractable : Node2D
                         {
                             state = 3;
                             stateTimer = resetTime;
+                            EmitSignal("Activated", !activated);
                         }
                         break;
                     //slow spin
                     case 3:
-                        activated = true;
+                        activated = false;
                         head.Rotate(Mathf.Deg2Rad(-slowRotation)*delta);
                         stateTimer -= delta;
                         if (stateTimer <= 0f)
                         {
                             state = 0;
-                            EmitSignal("Activated", !activated);
                         }
                         break;
                 }

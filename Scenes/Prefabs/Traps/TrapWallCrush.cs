@@ -1,21 +1,27 @@
 using Godot;
 using System;
 
+public enum ExtensionLength
+{
+    tile,
+    tile_half,
+    two_tiles,
+}
+
 public class TrapWallCrush : Trap
 {
     [Export]
-    float wallsSpeed = 50f;
+    ExtensionLength type = ExtensionLength.tile;
     [Export]
-    Vector2 wall1_startPos;
-    [Export]
-    Vector2 wall1_endPos;
-    [Export]
-    Vector2 wall2_startPos;
-    [Export]
-    Vector2 wall2_endPos;
+    float wallSpeed = 200f;
 
-    Node2D wall1;
-    Node2D wall2;
+    float moveLength = 0f;
+
+    Node2D wall;
+
+    Vector2 prevPos;
+
+    bool shouldKill = false;
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
@@ -25,8 +31,20 @@ public class TrapWallCrush : Trap
     {
         base._Ready();
 
-        wall1 = (Node2D)GetNode("wall1");
-        wall2 = (Node2D)GetNode("wall2");
+        wall = (Node2D)GetNode("wall");
+
+        switch(type)
+        {
+            case ExtensionLength.tile:
+                moveLength = 64f;
+                break;
+            case ExtensionLength.tile_half:
+                moveLength = 96f;
+                break;
+            case ExtensionLength.two_tiles:
+                moveLength = 128f;
+                break;
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,22 +54,22 @@ public class TrapWallCrush : Trap
         {
             //opened
             case 0:
-                if (isActive) state = 1;
+                if (isActive)
+                {
+                    prevPos = wall.Position;
+                    shouldKill = true;
+                    state = 1;
+                }
                 break;
             //close
             case 1:
                 {
-                    //wall1
-                    Vector2 wall1Direction = wall1_startPos.DirectionTo(wall1_endPos);
-                    Vector2 wall2Direction = wall2_startPos.DirectionTo(wall2_endPos);
-
-                    wall1.Position += wall1Direction * wallsSpeed * delta;
-                    wall2.Position += wall2Direction * wallsSpeed * delta;
-
-                    if (wall1.Position.DistanceTo(wall1_endPos) < 1f)
+                    wall.Position += wallSpeed * new Vector2(0f,1f) * delta;
+                    if (wall.Position.DistanceTo(prevPos) >= moveLength)
                     {
-                        wall1.Position = wall1_endPos;
-                        wall2.Position = wall2_endPos;
+                        prevPos += new Vector2(0f, moveLength);
+                        wall.Position = prevPos;
+                        shouldKill = false;
                         state = 2;
                     }
                     armed = false;
@@ -59,23 +77,22 @@ public class TrapWallCrush : Trap
                 break;
             //closed
             case 2:
-                if (!isActive) state = 3;
+                if (!isActive)
+                {
+                    prevPos = wall.Position;
+                    shouldKill = true;
+                    state = 3;
+                }
                 break;
             //open
             case 3:
+                wall.Position -= wallSpeed * new Vector2(0f, 1f) * delta;
+                if (wall.Position.DistanceTo(prevPos) >= moveLength)
                 {
-                    Vector2 wall1Direction = wall1_endPos.DirectionTo(wall1_startPos);
-                    Vector2 wall2Direction = wall2_endPos.DirectionTo(wall2_startPos);
-
-                    wall1.Position += wall1Direction * wallsSpeed * delta;
-                    wall2.Position += wall2Direction * wallsSpeed * delta;
-
-                    if (wall1.Position.DistanceTo(wall1_startPos) < 1f)
-                    {
-                        wall1.Position = wall1_startPos;
-                        wall2.Position = wall2_startPos;
-                        state = 0;
-                    }
+                    prevPos -= new Vector2(0f, moveLength);
+                    wall.Position = prevPos;
+                    shouldKill = false;
+                    state = 2;
                 }
                 armed = true;
                 break;
@@ -89,7 +106,7 @@ public class TrapWallCrush : Trap
 
     public void OnWallAreaBodyEntered(Node other)
     {
-        if(other.IsInGroup("player"))
+        if(other.IsInGroup("player") && shouldKill)
         {
             ((Player)other).Damage(float.MaxValue);
         }

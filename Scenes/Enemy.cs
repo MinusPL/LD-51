@@ -29,7 +29,7 @@ public class Enemy : KinematicBody2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        nav = (Navigation2D)GetNode("/root/Game/Level/Map");
+        nav = (Navigation2D)GetNode("/root/Game/Level/MapStuff/Map");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scenes/Pickup.cs" type="Script" id=1]
+[ext_resource path="res://img/sword.png" type="Texture" id=2]
+[ext_resource path="res://img/light.png" type="Texture" id=3]
+
+[sub_resource type="CapsuleShape2D" id=110]
+radius = 12.0
+height = 48.0
+
+[node name="Lamp" type="Node2D"]
+script = ExtResource( 1 )
+type = 1
+
+[node name="sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="trigger" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="trigger"]
+shape = SubResource( 110 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 3 )
+texture_scale = 0.2
+color = Color( 1, 0.984314, 0.764706, 1 )
+
+[connection signal="body_entered" from="trigger" to="." method="OnTriggerEntered"]
